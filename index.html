@@ -22,11 +22,10 @@ body {
   max-width: 340px;
   background: #1a1a1a;
   border-radius: 22px;
-  padding: 20px;
+  padding: 22px;
   text-align: center;
   color: white;
   box-shadow: 0 0 35px rgba(255,105,180,0.35);
-  position: relative;
 }
 
 /* 🔒 LOCK */
@@ -63,13 +62,6 @@ body {
   border-radius: 10px;
 }
 
-/* TEXT */
-#lockScreen p {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 8px;
-}
-
 /* INPUT */
 input {
   width: 100%;
@@ -79,10 +71,8 @@ input {
   font-size: 16px;
   text-align: center;
   margin-top: 6px;
-  outline: none;
 }
 
-/* BUTTON */
 button {
   margin-top: 10px;
   padding: 10px;
@@ -92,11 +82,6 @@ button {
   background: #ff7eb9;
   color: #111;
   font-size: 15px;
-  cursor: pointer;
-}
-
-button:active {
-  transform: scale(0.97);
 }
 
 .error {
@@ -111,12 +96,27 @@ button:active {
   display: none;
   font-size: 16px;
   line-height: 1.6;
-  animation: fadeIn 2s ease forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+#date {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+/* typing cursor */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 18px;
+  background: white;
+  animation: blink 1s infinite;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  0%,50% { opacity: 1; }
+  51%,100% { opacity: 0; }
 }
 
 /* 💗 HEARTS */
@@ -129,14 +129,8 @@ button:active {
 }
 
 @keyframes floatUp {
-  from {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100vh) scale(1.5);
-    opacity: 0;
-  }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100vh); opacity: 0; }
 }
 </style>
 </head>
@@ -145,6 +139,7 @@ button:active {
 
 <div id="app">
 
+  <!-- LOCK SCREEN -->
   <div id="lockScreen">
     <div class="lock" id="lock">
       <div class="shackle"></div>
@@ -152,21 +147,18 @@ button:active {
     </div>
 
     <p>Açmak için bir tarihi hatırla…</p>
-
     <input type="password" id="code" placeholder="••••">
     <button onclick="unlock()">Aç</button>
     <div class="error" id="error">Yanlış ama kalbim doğru 💔</div>
   </div>
 
+  <!-- NOTE -->
   <div id="note">
-    <p>
-      Sevdim seni bir kere…<br><br>
-      Bu sayfa, bu şarkı ve bu gün<br>
-      sadece sana ait.<br><br>
-      Seni çok seviyorum 💗
-    </p>
+    <div id="date"></div>
+    <p id="text"></p><span class="cursor"></span>
   </div>
 
+  <!-- MUSIC -->
   <audio id="music" src="sevdim-seni-bir-kere.mp3"></audio>
 </div>
 
@@ -177,15 +169,98 @@ const error = document.getElementById("error");
 const note = document.getElementById("note");
 const music = document.getElementById("music");
 const lockScreen = document.getElementById("lockScreen");
+const dateEl = document.getElementById("date");
+const textEl = document.getElementById("text");
 
+/* 💌 METİN */
+const message = `
+Evet aşkım…
+
+Bu, hayatımda ilk kez 14 Şubat’a bir sevgiliyle,
+hatta hayatımdaki tek kadınla girdiğim bir gün.
+
+Seni ilk gördüğümde kendi kendime
+“Bu kız bir melek mi?” diye sormuştum.
+Bunu sana hep söyledim, yine söylüyorum…
+
+Seninle buluşmadan önce dua etmiştim:
+“Allah’ım, eğer bu kız nasibimdeyse,
+onun yüzünü bana parlat.”
+
+Ve senin yüzün bir ışık gibi parlamıştı.
+O an anlamıştım…
+
+02.08.2025 tarihinde,
+saat 17.00 sularında,
+Yapek’in arkasındaki basketbol sahasında,
+eski bankların önünde,
+sahanın içinde demire yaslanırken
+utana utana beni kabul ettiğin için
+sana minnettarım aşkım.
+
+Beni hayatının bir parçası yaptığın için
+seni çok ama çok seviyorum.
+İnşallah ilişkimiz bir ömür boyu devam eder.
+
+Seninle birlikte olmak
+benim için dünyadaki en güzel şey.
+
+Bunca zaman dua ettim:
+“Allah’ım beni benim için hayırlı biriyle karşılaştır.”
+Ve sen bu duamın kabulüsün.
+
+En kötü anımda da,
+en mutlu anımda da
+yanımda olduğun için
+sana çok teşekkür ederim.
+
+Bence senin en güzel,
+en özel özelliğin aşkım;
+düşünceli olman ve ilgilenmen.
+Birine bir şey olduğunda,
+kim olursa olsun,
+hemen ilgilenir,
+onu eğlendirmeye çalışırsın.
+
+Fiziksel olarak bakacak olursak…
+O kahkahalarına,
+bir anda gelen koşma arzuna,
+her haline bayılıyorum.
+
+Çünkü küçükken ben de
+hep öyle şeyler isterdim
+ama yapamazdım,
+utanırdım.
+Sen yapabiliyorsun…
+
+Sende kendi küçüklüğümü görüyorum
+ve bu beni daha da mutlu ediyor.
+
+Daha çok şey yazabilirim
+ama bazen kelimeler yetmiyor.
+Çünkü sen benim gözümde kusursuzsun.
+
+Her özelliğine bayılıyorum.
+İnşallah sana iyi bir eş
+ve iyi bir sevgili olabiliyorumdur.
+`;
+
+/* 💗 HEART */
 function createHeart() {
   const heart = document.createElement("div");
   heart.className = "heart";
   heart.innerText = "💗";
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = 3 + Math.random() * 2 + "s";
   document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 5000);
+  setTimeout(() => heart.remove(), 4000);
+}
+
+/* ✍️ TYPING */
+function typeText(text, i = 0) {
+  if (i < text.length) {
+    textEl.innerHTML += text.charAt(i);
+    setTimeout(() => typeText(text, i + 1), 45);
+  }
 }
 
 function unlock() {
@@ -194,25 +269,29 @@ function unlock() {
     lock.classList.add("open");
 
     music.volume = 0;
-    music.load();
     music.play();
-
     let v = 0;
     const fade = setInterval(() => {
-      if (v < 0.6) {
-        v += 0.02;
-        music.volume = v;
-      } else clearInterval(fade);
+      if (v < 0.6) { v += 0.02; music.volume = v; }
+      else clearInterval(fade);
     }, 100);
 
-    const hearts = setInterval(createHeart, 300);
+    const heartInterval = setInterval(createHeart, 300);
 
     setTimeout(() => {
       lockScreen.style.display = "none";
       note.style.display = "block";
+
+      const now = new Date();
+      dateEl.innerText =
+        now.toLocaleDateString("tr-TR", { day:"numeric", month:"long", year:"numeric" })
+        + " • " +
+        now.toLocaleTimeString("tr-TR", { hour:"2-digit", minute:"2-digit" });
+
+      typeText(message.trim());
     }, 1200);
 
-    setTimeout(() => clearInterval(hearts), 5000);
+    setTimeout(() => clearInterval(heartInterval), 5000);
   } else {
     error.style.display = "block";
   }
