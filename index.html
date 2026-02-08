@@ -9,92 +9,105 @@
 body {
   margin: 0;
   height: 100vh;
-  background: #111;
+  background: #0f0f0f;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
 }
 
 #app {
   width: 90%;
-  max-width: 360px;
-  background: #1c1c1c;
-  border-radius: 20px;
-  padding: 24px;
+  max-width: 340px;
+  background: #1a1a1a;
+  border-radius: 22px;
+  padding: 20px;
   text-align: center;
   color: white;
-  box-shadow: 0 0 30px rgba(255,105,180,0.4);
+  box-shadow: 0 0 35px rgba(255,105,180,0.35);
 }
 
-/* 🔒 KİLİT */
+/* 🔒 LOCK */
 .lock {
-  width: 80px;
-  margin: 0 auto 20px;
+  width: 60px;
+  margin: 0 auto 14px;
 }
 
 .shackle {
-  width: 60px;
-  height: 50px;
-  border: 6px solid #ff7eb9;
+  width: 44px;
+  height: 36px;
+  border: 5px solid #ff7eb9;
   border-bottom: none;
-  border-radius: 30px 30px 0 0;
+  border-radius: 22px 22px 0 0;
   margin: 0 auto;
   transition: transform 1.2s ease;
   transform-origin: left bottom;
 }
 
 .lock.open .shackle {
-  transform: rotate(-35deg) translate(-10px, 5px);
+  transform: rotate(-35deg) translate(-8px, 4px);
 }
 
 .lock-body {
-  width: 80px;
-  height: 60px;
+  width: 60px;
+  height: 46px;
   background: #ff7eb9;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
-/* ŞİFRE */
+/* TEXT */
+#lockScreen p {
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+/* INPUT */
 input {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 8px;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 6px;
+  outline: none;
 }
 
+/* BUTTON */
 button {
-  margin-top: 12px;
+  margin-top: 10px;
   padding: 10px;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   background: #ff7eb9;
   color: #111;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.98);
 }
 
 .error {
   color: #ff6b6b;
-  margin-top: 8px;
+  font-size: 13px;
+  margin-top: 6px;
   display: none;
 }
 
-/* NOT */
+/* NOTE */
 #note {
   display: none;
-  margin-top: 10px;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.6;
-  animation: fadeIn 1.5s ease forwards;
+  animation: fadeIn 1.6s ease forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
@@ -104,7 +117,7 @@ button {
 
 <div id="app">
 
-  <!-- 🔒 KİLİT EKRANI -->
+  <!-- LOCK SCREEN -->
   <div id="lockScreen">
 
     <div class="lock" id="lock">
@@ -120,7 +133,7 @@ button {
 
   </div>
 
-  <!-- 💌 NOT -->
+  <!-- NOTE -->
   <div id="note">
     <p>
       Sevdim seni bir kere…<br><br>
@@ -130,7 +143,7 @@ button {
     </p>
   </div>
 
-  <!-- 🎵 MÜZİK -->
+  <!-- MUSIC -->
   <audio id="music" src="sevdim-seni-bir-kere.mp3"></audio>
 
 </div>
@@ -153,10 +166,9 @@ function unlock() {
     music.play();
 
     setTimeout(() => {
-      lockScreen.style.display = "none"; // 🔥 KİLİT + ŞİFRE GİDER
-      note.style.display = "block";      // 💌 SADECE NOT KALIR
+      lockScreen.style.display = "none";
+      note.style.display = "block";
     }, 1200);
-
   } else {
     error.style.display = "block";
   }
