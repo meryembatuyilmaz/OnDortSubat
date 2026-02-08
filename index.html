@@ -1,67 +1,152 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sana Özel</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sana Özel 💗</title>
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: Arial, sans-serif;
-    }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
 
-    #app {
-      width: 90%;
-      max-width: 360px;
-      background: #1c1c1c;
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      color: white;
-      box-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
-    }
+#app {
+  width: 90%;
+  max-width: 360px;
+  background: #1c1c1c;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 30px rgba(255,105,180,0.4);
+}
 
-    .lock {
-      width: 80px;
-      margin: 0 auto 16px;
-    }
+/* 🔒 KİLİT */
+.lock {
+  width: 80px;
+  margin: 0 auto 20px;
+}
 
-    .shackle {
-      width: 60px;
-      height: 50px;
-      border: 6px solid #ff7eb9;
-      border-bottom: none;
-      border-radius: 30px 30px 0 0;
-      margin: 0 auto;
-    }
+.shackle {
+  width: 60px;
+  height: 50px;
+  border: 6px solid #ff7eb9;
+  border-bottom: none;
+  border-radius: 30px 30px 0 0;
+  margin: 0 auto;
+  transition: transform 1.2s ease;
+  transform-origin: left bottom;
+}
 
-    .body {
-      width: 80px;
-      height: 60px;
-      background: #ff7eb9;
-      border-radius: 12px;
-    }
-  </style>
+.lock.open .shackle {
+  transform: rotate(-35deg) translate(-10px, 5px);
+}
+
+.lock-body {
+  width: 80px;
+  height: 60px;
+  background: #ff7eb9;
+  border-radius: 12px;
+}
+
+/* ŞİFRE */
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 12px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  background: #ff7eb9;
+  color: #111;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.error {
+  color: #ff6b6b;
+  margin-top: 8px;
+  display: none;
+}
+
+/* NOT */
+#note {
+  display: none;
+  margin-top: 20px;
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
 </head>
 
 <body>
 
-  <div id="app">
+<div id="app">
 
-    <div class="lock">
-      <div class="shackle"></div>
-      <div class="body"></div>
-    </div>
-
-    <p class="hint">Açmak için bir tarihi hatırla…</p>
-
+  <div class="lock" id="lock">
+    <div class="shackle"></div>
+    <div class="lock-body"></div>
   </div>
+
+  <p>Açmak için bir tarihi hatırla…</p>
+
+  <input type="password" id="code" placeholder="••••">
+  <button onclick="unlock()">Aç</button>
+  <div class="error" id="error">Yanlış ama kalbim doğru 💔</div>
+
+  <div id="note">
+    <p>
+      Sevdim seni bir kere…<br><br>
+      Bu sayfa, bu şarkı ve bu gün  
+      sadece sana ait.<br><br>
+      İyi ki varsın 💗
+    </p>
+  </div>
+
+  <audio id="music" src="sevdim-seni-bir-kere.mp3"></audio>
+
+</div>
+
+<script>
+const lock = document.getElementById("lock");
+const input = document.getElementById("code");
+const error = document.getElementById("error");
+const note = document.getElementById("note");
+const music = document.getElementById("music");
+
+function unlock() {
+  if (input.value === "0208") {
+    error.style.display = "none";
+    lock.classList.add("open");
+    music.volume = 0.6;
+    music.play();
+    setTimeout(() => {
+      note.style.display = "block";
+    }, 1200);
+  } else {
+    error.style.display = "block";
+  }
+}
+</script>
 
 </body>
 </html>
