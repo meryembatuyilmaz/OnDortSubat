@@ -14,6 +14,7 @@ body {
   justify-content: center;
   align-items: center;
   font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  overflow: hidden;
 }
 
 #app {
@@ -25,12 +26,19 @@ body {
   text-align: center;
   color: white;
   box-shadow: 0 0 35px rgba(255,105,180,0.35);
+  position: relative;
 }
 
 /* 🔒 LOCK */
 .lock {
   width: 60px;
   margin: 0 auto 14px;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .shackle {
@@ -88,7 +96,7 @@ button {
 }
 
 button:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .error {
@@ -103,12 +111,32 @@ button:active {
   display: none;
   font-size: 16px;
   line-height: 1.6;
-  animation: fadeIn 1.6s ease forwards;
+  animation: fadeIn 2s ease forwards;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* 💗 HEARTS */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 18px;
+  animation: floatUp 4s linear forwards;
+  color: #ff7eb9;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100vh) scale(1.5);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -117,9 +145,7 @@ button:active {
 
 <div id="app">
 
-  <!-- LOCK SCREEN -->
   <div id="lockScreen">
-
     <div class="lock" id="lock">
       <div class="shackle"></div>
       <div class="lock-body"></div>
@@ -130,10 +156,8 @@ button:active {
     <input type="password" id="code" placeholder="••••">
     <button onclick="unlock()">Aç</button>
     <div class="error" id="error">Yanlış ama kalbim doğru 💔</div>
-
   </div>
 
-  <!-- NOTE -->
   <div id="note">
     <p>
       Sevdim seni bir kere…<br><br>
@@ -143,9 +167,7 @@ button:active {
     </p>
   </div>
 
-  <!-- MUSIC -->
   <audio id="music" src="sevdim-seni-bir-kere.mp3"></audio>
-
 </div>
 
 <script>
@@ -156,19 +178,41 @@ const note = document.getElementById("note");
 const music = document.getElementById("music");
 const lockScreen = document.getElementById("lockScreen");
 
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "💗";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
+}
+
 function unlock() {
   if (input.value === "0208") {
     error.style.display = "none";
     lock.classList.add("open");
 
-    music.volume = 0.6;
+    music.volume = 0;
     music.load();
     music.play();
+
+    let v = 0;
+    const fade = setInterval(() => {
+      if (v < 0.6) {
+        v += 0.02;
+        music.volume = v;
+      } else clearInterval(fade);
+    }, 100);
+
+    const hearts = setInterval(createHeart, 300);
 
     setTimeout(() => {
       lockScreen.style.display = "none";
       note.style.display = "block";
     }, 1200);
+
+    setTimeout(() => clearInterval(hearts), 5000);
   } else {
     error.style.display = "block";
   }
