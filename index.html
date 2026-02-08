@@ -87,7 +87,9 @@ button {
 /* NOT */
 #note {
   display: none;
-  margin-top: 20px;
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.6;
   animation: fadeIn 1.5s ease forwards;
 }
 
@@ -102,26 +104,33 @@ button {
 
 <div id="app">
 
-  <div class="lock" id="lock">
-    <div class="shackle"></div>
-    <div class="lock-body"></div>
+  <!-- 🔒 KİLİT EKRANI -->
+  <div id="lockScreen">
+
+    <div class="lock" id="lock">
+      <div class="shackle"></div>
+      <div class="lock-body"></div>
+    </div>
+
+    <p>Açmak için bir tarihi hatırla…</p>
+
+    <input type="password" id="code" placeholder="••••">
+    <button onclick="unlock()">Aç</button>
+    <div class="error" id="error">Yanlış ama kalbim doğru 💔</div>
+
   </div>
 
-  <p>Açmak için bir tarihi hatırla…</p>
-
-  <input type="password" id="code" placeholder="••••">
-  <button onclick="unlock()">Aç</button>
-  <div class="error" id="error">Yanlış ama kalbim doğru 💔</div>
-
+  <!-- 💌 NOT -->
   <div id="note">
     <p>
       Sevdim seni bir kere…<br><br>
-      Bu sayfa, bu şarkı ve bu gün  
+      Bu sayfa, bu şarkı ve bu gün<br>
       sadece sana ait.<br><br>
-      İyi ki varsın 💗
+      Seni çok seviyorum 💗
     </p>
   </div>
 
+  <!-- 🎵 MÜZİK -->
   <audio id="music" src="sevdim-seni-bir-kere.mp3"></audio>
 
 </div>
@@ -132,16 +141,22 @@ const input = document.getElementById("code");
 const error = document.getElementById("error");
 const note = document.getElementById("note");
 const music = document.getElementById("music");
+const lockScreen = document.getElementById("lockScreen");
 
 function unlock() {
   if (input.value === "0208") {
     error.style.display = "none";
     lock.classList.add("open");
+
     music.volume = 0.6;
+    music.load();
     music.play();
+
     setTimeout(() => {
-      note.style.display = "block";
+      lockScreen.style.display = "none"; // 🔥 KİLİT + ŞİFRE GİDER
+      note.style.display = "block";      // 💌 SADECE NOT KALIR
     }, 1200);
+
   } else {
     error.style.display = "block";
   }
