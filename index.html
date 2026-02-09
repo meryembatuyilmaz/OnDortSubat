@@ -9,109 +9,100 @@
 body {
   margin: 0;
   height: 100vh;
-  background: #0f0f0f;
+  background: #111;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
 }
 
 #app {
   width: 90%;
   max-width: 360px;
-  background: #1a1a1a;
-  border-radius: 22px;
-  padding: 22px;
+  background: #1c1c1c;
+  border-radius: 20px;
+  padding: 24px;
   text-align: center;
-  color: white;
-  box-shadow: 0 0 35px rgba(255,105,180,0.35);
+  box-shadow: 0 0 30px rgba(255,105,180,0.3);
 }
 
-/* LOCK */
+/* KİLİT */
 .lock {
-  width: 60px;
-  margin: 0 auto 14px;
+  margin-bottom: 20px;
 }
-
 .shackle {
-  width: 44px;
-  height: 36px;
-  border: 5px solid #ff7eb9;
-  border-bottom: none;
-  border-radius: 22px 22px 0 0;
-  margin: 0 auto;
-  transition: transform 1.2s ease;
-  transform-origin: left bottom;
-}
-
-.lock.open .shackle {
-  transform: rotate(-35deg) translate(-8px, 4px);
-}
-
-.lock-body {
   width: 60px;
-  height: 46px;
+  height: 50px;
+  border: 6px solid #ff7eb9;
+  border-bottom: none;
+  border-radius: 30px 30px 0 0;
+  margin: 0 auto;
+  transition: transform 1s ease;
+}
+.lock-body {
+  width: 80px;
+  height: 60px;
   background: #ff7eb9;
-  border-radius: 10px;
+  border-radius: 12px;
+  margin: 0 auto;
 }
 
 /* INPUT */
 input {
   width: 100%;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
-  font-size: 16px;
+  margin-top: 10px;
   text-align: center;
-  margin-top: 8px;
+  font-size: 16px;
 }
 
+/* BUTON */
 button {
-  margin-top: 10px;
-  padding: 10px;
-  width: 100%;
-  border-radius: 8px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  border-radius: 20px;
   border: none;
   background: #ff7eb9;
-  color: #111;
-  font-size: 15px;
-}
-
-.error {
-  color: #ff6b6b;
-  font-size: 13px;
-  margin-top: 6px;
-  display: none;
-}
-
-/* NOTE */
-#note {
-  display: none;
+  color: white;
   font-size: 16px;
-  line-height: 1.6;
-  text-align: left;
+  cursor: pointer;
 }
 
-#date {
+/* GİZLİ ALANLAR */
+.hidden {
+  display: none;
+}
+
+.fade {
+  animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(10px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+/* SORU */
+.options {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+#no {
+  position: relative;
+}
+.small {
   font-size: 13px;
-  opacity: 0.7;
-  margin-bottom: 12px;
-  text-align: center;
+  opacity: 0.8;
 }
 
-/* HEARTS */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 18px;
-  animation: floatUp 4s linear forwards;
-  color: #ff7eb9;
-}
-
-@keyframes floatUp {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-100vh); opacity: 0; }
+/* COUNTDOWN */
+#countdown {
+  font-size: 20px;
+  margin-top: 20px;
 }
 </style>
 </head>
@@ -120,128 +111,86 @@ button {
 
 <div id="app">
 
+  <!-- KİLİT EKRANI -->
   <div id="lockScreen">
-    <div class="lock" id="lock">
-      <div class="shackle"></div>
+    <div class="lock">
+      <div class="shackle" id="shackle"></div>
       <div class="lock-body"></div>
     </div>
-
     <p>Açmak için bir tarihi hatırla…</p>
-    <input type="password" id="code" placeholder="••••">
-    <button onclick="unlock()">Aç</button>
-    <div class="error" id="error">Yanlış ama kalbim doğru 💔</div>
+    <input type="password" id="password" placeholder="••••">
+    <button onclick="checkPassword()">Aç</button>
   </div>
 
-  <div id="note">
-    <div id="date"></div>
-    <div id="text"></div>
+  <!-- NOT -->
+  <div id="noteScreen" class="hidden fade">
+    <p style="font-size:14px; text-align:left; line-height:1.6;">
+Evet Aşkım, Bu ilk 14 Şubat'a bir sevgiliyle hatta hayatımdaki tek kadınla girdiğim bir şey...
+<br><br>
+Seni 02.08.2025 tarihinde 17.00 sularında beni kabul ettiğin için sana minnettarım...
+<br><br>
+İnşallah sana iyi bir eş ve sevgili olabiliyorumdur 💗
+    </p>
+
+    <p><b>Bir oyuna var mısın?</b></p>
+
+    <div class="options">
+      <button onclick="goCountdown()">Evet</button>
+      <button id="no" onmouseover="moveNo()">Hayır</button>
+    </div>
+    <p id="tease" class="small hidden">Bence kalbin evet diyor…</p>
   </div>
 
-  <audio id="music" src="sevdim-seni-bir-kere.mp3"></audio>
+  <!-- COUNTDOWN -->
+  <div id="countdownScreen" class="hidden fade">
+    <h3>14 Şubat’a Kalan Süre 💕</h3>
+    <div id="countdown"></div>
+    <p class="small">Bu sürpriz zamanı gelmeden açılmaz…</p>
+  </div>
+
 </div>
 
 <script>
-const lock = document.getElementById("lock");
-const input = document.getElementById("code");
-const error = document.getElementById("error");
-const note = document.getElementById("note");
-const music = document.getElementById("music");
-const lockScreen = document.getElementById("lockScreen");
-const dateEl = document.getElementById("date");
-const textEl = document.getElementById("text");
-
-const message = `
-Evet Aşkım…
-
-Bu ilk 14 Şubat’a bir sevgiliyle,
-hatta hayatımdaki tek kadınla girdiğim gün.
-
-Seni ilk gördüğümde
-“Bu kız bir melek mi?” diye sormuştum.
-Bunu hep söyledim, yine söylüyorum…
-
-Seninle buluşmadan önce dua etmiştim:
-Allah’ım, eğer bu kız nasibimdeyse
-onun yüzünü bana parlat.
-
-Ve senin yüzün bir ışık gibi parlamıştı.
-O an anlamıştım.
-
-02.08.2025 tarihinde
-saat 17.00 sularında,
-Yapek’in arkasındaki basketbol sahasında,
-eski bankların önünde,
-utana utana beni kabul ettiğin için
-sana minnettarım aşkım.
-
-Beni hayatının bir parçası yaptığın için
-seni çok ama çok seviyorum.
-
-Seninle birlikte olmak
-benim için dünyadaki en güzel şey.
-
-Bunca zaman dua ettim:
-Allah’ım beni benim için hayırlı biriyle karşılaştır diye.
-Ve sen bu duamın kabulüsün.
-
-En kötü anımda da
-en mutlu anımda da
-yanımda olduğun için teşekkür ederim.
-
-İnşallah sana iyi bir eş
-ve iyi bir sevgili olabiliyorumdur.
-`;
-
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = "💗";
-  heart.style.left = Math.random() * 100 + "vw";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 4000);
-}
-
-function typeText(text, i = 0) {
-  if (i < text.length) {
-    textEl.textContent += text[i];
-    setTimeout(() => typeText(text, i + 1), 45);
-  }
-}
-
-function unlock() {
-  if (input.value === "0208") {
-    error.style.display = "none";
-    lock.classList.add("open");
-
-    music.volume = 0;
-    music.play();
-    let v = 0;
-    const fade = setInterval(() => {
-      if (v < 0.6) {
-        v += 0.02;
-        music.volume = v;
-      } else clearInterval(fade);
-    }, 100);
-
-    const hearts = setInterval(createHeart, 350);
-
+function checkPassword() {
+  const pass = document.getElementById("password").value;
+  if (pass === "0208") {
+    document.getElementById("shackle").style.transform = "rotate(-45deg) translateY(-10px)";
     setTimeout(() => {
-      lockScreen.style.display = "none";
-      note.style.display = "block";
-
-      const now = new Date();
-      dateEl.textContent =
-        now.toLocaleDateString("tr-TR", { day:"numeric", month:"long", year:"numeric" }) +
-        " • " +
-        now.toLocaleTimeString("tr-TR", { hour:"2-digit", minute:"2-digit" });
-
-      typeText(message.trim());
-    }, 1200);
-
-    setTimeout(() => clearInterval(hearts), 5000);
+      document.getElementById("lockScreen").classList.add("hidden");
+      document.getElementById("noteScreen").classList.remove("hidden");
+    }, 1000);
   } else {
-    error.style.display = "block";
+    alert("Yanlış ama kalbin doğru 💗");
   }
+}
+
+function moveNo() {
+  const btn = document.getElementById("no");
+  btn.style.left = Math.random()*100 - 50 + "px";
+  btn.style.top = Math.random()*50 - 25 + "px";
+  document.getElementById("tease").classList.remove("hidden");
+}
+
+function goCountdown() {
+  document.getElementById("noteScreen").classList.add("hidden");
+  document.getElementById("countdownScreen").classList.remove("hidden");
+  startCountdown();
+}
+
+function startCountdown() {
+  const target = new Date("February 14, 2026 00:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = target - now;
+
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const s = Math.floor((diff % (1000*60)) / 1000);
+
+    document.getElementById("countdown").innerHTML =
+      `${d}g ${h}s ${m}d ${s}s`;
+  }, 1000);
 }
 </script>
 
