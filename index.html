@@ -6,133 +6,51 @@
 <title>Sana Özel 💗</title>
 
 <style>
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #111;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
+body{
+  margin:0;
+  min-height:100vh;
+  background:#111;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+  color:white;
 }
 
-#app {
-  width: 90%;
-  max-width: 420px;
-  background: #1c1c1c;
-  border-radius: 20px;
-  padding: 24px;
-  color: white;
-  text-align: center;
-  box-shadow: 0 0 30px rgba(255,105,180,0.35);
+#app{
+  width:90%;
+  max-width:420px;
+  background:#1c1c1c;
+  border-radius:20px;
+  padding:24px;
+  text-align:center;
+  box-shadow:0 0 30px rgba(255,105,180,0.35);
 }
 
-.hidden { display: none; }
+.hidden{display:none;}
 
-/* KİLİT */
-.lock {
-  width: 90px;
-  margin: 0 auto 16px;
+button{
+  margin-top:12px;
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  background:#ff7eb9;
+  color:white;
+  cursor:pointer;
 }
 
-.shackle {
-  width: 60px;
-  height: 50px;
-  border: 6px solid #ff7eb9;
-  border-bottom: none;
-  border-radius: 30px 30px 0 0;
-  margin: 0 auto;
+.no{background:#444;}
+
+.options{
+  display:flex;
+  justify-content:space-around;
+  margin-top:20px;
 }
 
-.lock-body {
-  width: 80px;
-  height: 60px;
-  background: #ff7eb9;
-  border-radius: 12px;
-  margin: 0 auto;
-}
-
-/* INPUT */
-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin-top: 10px;
-  font-size: 16px;
-  text-align: center;
-}
-
-button {
-  margin-top: 12px;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  background: #ff7eb9;
-  color: white;
-  cursor: pointer;
-}
-
-/* METİN */
-.note p {
-  font-size: 16px;
-  line-height: 1.7;
-  margin-bottom: 12px;
-  animation: fadeIn 1s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* KALP */
-.heart {
-  text-align: center;
-  margin: 10px 0;
-  animation: pulse 1.2s infinite;
-}
-
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-}
-
-/* EVET HAYIR */
-.options {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-}
-
-.no {
-  background: #444;
-  position: relative;
-}
-
-/* KALP YAĞMURU */
-.falling-heart {
-  position: fixed;
-  top: -30px;
-  font-size: 22px;
-  animation: fall linear forwards;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
-
-/* GERİ SAYIM */
-#countdown {
-  font-size: 22px;
-  margin-top: 20px;
+#countdown{
+  font-size:22px;
+  margin-top:20px;
 }
 </style>
 </head>
@@ -141,29 +59,15 @@ button {
 
 <div id="app">
 
-<!-- KİLİT EKRANI -->
 <div id="lockScreen">
-  <div class="lock">
-    <div class="shackle"></div>
-    <div class="lock-body"></div>
-  </div>
-
-  <p>Açmak için bir tarihi hatırla…</p>
-  <input id="password" placeholder="GG.AA.YYYY">
+  <p>Açmak için tarihi gir...</p>
+  <input id="password" placeholder="02.08.2025">
   <button onclick="checkPass()">Aç 💗</button>
 </div>
 
-<!-- NOT -->
-<div id="noteScreen" class="hidden note">
-  <p>Evet Aşkım, Bu ilk 14 Şubat'a bir sevgiliyle hatta hayatımdaki tek kadınla girdiğim bir şey.</p>
-  <div class="heart">💗</div>
-  <p>Seni ilk gördüğümde bu kız bir melek mi diye kendime sormuştum...</p>
-  <div class="heart">💗</div>
-  <p>02.08.2025 Tarihinde 17.00 sularında beni kabul ettiğin için sana minnettarım aşkım.</p>
-  <div class="heart">💗</div>
-  <p>Sen benim duamın kabulusun. Seni çok ama çok seviyorum.</p>
-
-  <p style="margin-top:20px;">Bir oyuna var mısın?</p>
+<div id="noteScreen" class="hidden">
+  <p>Seni çok seviyorum...</p>
+  <p>Bir oyuna var mısın?</p>
 
   <div class="options">
     <button onclick="yesClicked()">Evet 💖</button>
@@ -171,7 +75,6 @@ button {
   </div>
 </div>
 
-<!-- GERİ SAYIM -->
 <div id="countdownScreen" class="hidden">
   <p>14 Şubat sürprizi için geri sayım 💗</p>
   <div id="countdown"></div>
@@ -179,80 +82,70 @@ button {
 
 </div>
 
-<!-- MÜZİK -->
 <audio id="music" src="sevdim_seni_bir_kere.mp3" loop></audio>
 
 <script>
-function checkPass() {
-  const pass = document.getElementById("password").value;
-  if (pass === "02.08.2025") {
+
+function checkPass(){
+  const pass=document.getElementById("password").value;
+  if(pass==="02.08.2025"){
     document.getElementById("lockScreen").classList.add("hidden");
     document.getElementById("noteScreen").classList.remove("hidden");
     startMusic();
-  } else {
+  }else{
     alert("Bir daha düşün 💗");
   }
 }
 
-function startMusic() {
-  const music = document.getElementById("music");
-  music.volume = 0;
+function startMusic(){
+  const music=document.getElementById("music");
+  music.volume=0;
   music.play();
-  let v = 0;
-  const fade = setInterval(() => {
-    if (v < 1) {
-      v += 0.02;
-      music.volume = v;
-    } else {
+  let v=0;
+  const fade=setInterval(()=>{
+    if(v<1){
+      v+=0.02;
+      music.volume=v;
+    }else{
       clearInterval(fade);
     }
-  }, 200);
+  },200);
 }
 
-function moveNo() {
-  const no = document.getElementById("noBtn");
-  no.style.position = "absolute";
-  no.style.left = Math.random() * 70 + "%";
-  no.style.top = Math.random() * 70 + "%";
-  no.innerText = "Bence Kalbin Evet Diyor…";
+function moveNo(){
+  const no=document.getElementById("noBtn");
+  no.style.position="absolute";
+  no.style.left=Math.random()*70+"%";
+  no.style.top=Math.random()*70+"%";
 }
 
-function yesClicked() {
-  heartRain();
-  setTimeout(() => {
-    document.getElementById("noteScreen").classList.add("hidden");
-    document.getElementById("countdownScreen").classList.remove("hidden");
-    startCountdown();
-  }, 1500);
+function yesClicked(){
+  document.getElementById("noteScreen").classList.add("hidden");
+  document.getElementById("countdownScreen").classList.remove("hidden");
+  startCountdown();
 }
 
-function heartRain() {
-  const interval = setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "falling-heart";
-    h.innerHTML = "💗";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = 2 + Math.random() * 2 + "s";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 4000);
-  }, 120);
+function startCountdown(){
+  const target=new Date("2026-02-14T00:00:00").getTime();
 
-  setTimeout(() => clearInterval(interval), 4000);
-}
+  const interval=setInterval(()=>{
+    const now=new Date().getTime();
+    const diff=target-now;
 
-function startCountdown() {
-  const target = new Date("2026-02-14T00:00:00").getTime();
-  setInterval(() => {
-    const now = new Date().getTime();
-    const diff = target - now;
-    const d = Math.floor(diff / (1000*60*60*24));
-    const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-    const m = Math.floor((diff%(1000*60*60))/(1000*60));
-    document.getElementById("countdown").innerHTML =
+    if(diff<=0){
+      clearInterval(interval);
+      window.location.href="valentine.html";
+    }
+
+    const d=Math.floor(diff/(1000*60*60*24));
+    const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const m=Math.floor((diff%(1000*60*60))/(1000*60));
+
+    document.getElementById("countdown").innerHTML=
       `${d} gün ${h} saat ${m} dakika 💗`;
-  }, 1000);
+  },1000);
 }
-</script>
 
+</script>
 </body>
 </html>
