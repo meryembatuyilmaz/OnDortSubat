@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sevgililer Günümüz 💗</title>
+
+<style>
+body{
+  margin:0;
+  background:black;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+  font-family:Arial;
+}
+
+#photo{
+  width:80vw;
+  height:80vh;
+  object-fit:contain;
+  border-radius:20px;
+  box-shadow:0 0 60px rgba(255,105,180,0.6);
+  opacity:0;
+  transition:all 2s ease;
+  filter:blur(15px);
+  cursor:pointer;
+}
+
+#photo.active{
+  opacity:1;
+  filter:blur(0);
+  transform:scale(1.05);
+}
+
+#textBox{
+  position:absolute;
+  text-align:center;
+  opacity:0;
+  transition:opacity 3s;
+  animation:glow 3s infinite alternate;
+}
+
+@keyframes glow{
+  from{ text-shadow:0 0 10px #ff7eb9;}
+  to{ text-shadow:0 0 40px #ff1493;}
+}
+</style>
+</head>
+
+<body>
+
+<img id="photo">
+<div id="textBox">
+  <h1>Sevgililer Günün Kutlu Olsun Çiçeğim...</h1>
+  <p>Benim Sevgilim ve Benim Anılarım olduğun için teşekkür ederim Papatyam...</p>
+</div>
+
+<audio id="music" src="sevdim_seni_bir_kere.mp3" autoplay loop></audio>
+
+<script>
+
+/* GÜVENLİK: 14 Şubat değilse geri dön */
+const today=new Date();
+if(!(today.getMonth()===1 && today.getDate()===14)){
+  window.location.href="index.html";
+}
+
+/* FOTO LİSTESİ */
+const photos=[];
+for(let i=1;i<=33;i++){
+  photos.push(`foto${i}.jpg`);
+}
+
+const photo=document.getElementById("photo");
+let index=0;
+
+function showNext(){
+  if(index>=photos.length){
+    document.getElementById("textBox").style.opacity=1;
+    return;
+  }
+
+  photo.classList.remove("active");
+
+  setTimeout(()=>{
+    photo.src=photos[index];
+    photo.classList.add("active");
+    index++;
+  },1200);
+}
+
+setInterval(showNext,4000);
+showNext();
+
+</script>
+</body>
+</html>
